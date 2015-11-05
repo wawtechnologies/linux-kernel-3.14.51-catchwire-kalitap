@@ -1328,21 +1328,7 @@
 			ti,hwmods = "usb_otg_hs";
 			status = "okay";
 
-			dma-controller@47402000 {
-                                compatible = "ti,am3359-cppi41";
-                                reg = <0x47400000 0x1000 0x47402000 0x1000 0x47403000 0x1000 0x47404000 0x4000>;
-                                reg-names = "glue", "controller", "scheduler", "queuemgr";
-                                interrupts = <0x11>;
-                                interrupt-names = "glue";
-                                #dma-cells = <0x2>;
-                                #dma-channels = <0x1e>;
-                                #dma-requests = <0x100>;
-                                status = "okay";
-                                linux,phandle = <0x31>;
-                                phandle = <0x31>;
-                        };
-
-			control@44e10000 {
+			control@44e10620 {
 				compatible = "ti,am335x-usb-ctrl-module";
 				reg = <0x44e10620 0x10 0x44e10648 0x4>;
 				reg-names = "phy_ctrl", "wakeup";
@@ -1403,6 +1389,20 @@
 				phys = <0x32>;
 				dmas = <0x31 0xf 0x0 0x31 0x10 0x0 0x31 0x11 0x0 0x31 0x12 0x0 0x31 0x13 0x0 0x31 0x14 0x0 0x31 0x15 0x0 0x31 0x16 0x0 0x31 0x17 0x0 0x31 0x18 0x0 0x31 0x19 0x0 0x31 0x1a 0x0 0x31 0x1b 0x0 0x31 0x1c 0x0 0x31 0x1d 0x0 0x31 0xf 0x1 0x31 0x10 0x1 0x31 0x11 0x1 0x31 0x12 0x1 0x31 0x13 0x1 0x31 0x14 0x1 0x31 0x15 0x1 0x31 0x16 0x1 0x31 0x17 0x1 0x31 0x18 0x1 0x31 0x19 0x1 0x31 0x1a 0x1 0x31 0x1b 0x1 0x31 0x1c 0x1 0x31 0x1d 0x1>;
 				dma-names = "rx1", "rx2", "rx3", "rx4", "rx5", "rx6", "rx7", "rx8", "rx9", "rx10", "rx11", "rx12", "rx13", "rx14", "rx15", "tx1", "tx2", "tx3", "tx4", "tx5", "tx6", "tx7", "tx8", "tx9", "tx10", "tx11", "tx12", "tx13", "tx14", "tx15";
+			};
+
+			dma-controller@47402000 {
+				compatible = "ti,am3359-cppi41";
+				reg = <0x47400000 0x1000 0x47402000 0x1000 0x47403000 0x1000 0x47404000 0x4000>;
+				reg-names = "glue", "controller", "scheduler", "queuemgr";
+				interrupts = <0x11>;
+				interrupt-names = "glue";
+				#dma-cells = <0x2>;
+				#dma-channels = <0x1e>;
+				#dma-requests = <0x100>;
+				status = "okay";
+				linux,phandle = <0x31>;
+				phandle = <0x31>;
 			};
 		};
 
@@ -1546,6 +1546,42 @@
 			compatible = "ti,am3352-ocmcram";
 			reg = <0x40300000 0x10000>;
 			ti,hwmods = "ocmcram";
+		};
+
+		wkup_m3@44d00000 {
+			compatible = "ti,am3353-wkup-m3";
+			reg = <0x44d00000 0x4000 0x44d80000 0x2000 0x44e11324 0x24>;
+			reg-names = "m3_umem", "m3_dmem", "ipc_regs";
+			interrupts = <0x4e>;
+			ti,hwmods = "wkup_m3";
+			ti,no-reset-on-init;
+			mboxes = <0x3a 0x3b>;
+			ti,scale-data-fw = "am335x-evm-scale-data.bin";
+		};
+
+		pruss@4a300000 {
+			compatible = "ti,am335x-pruss";
+			ti,hwmods = "pruss";
+			reg = <0x4a300000 0x2000 0x4a302000 0x2000 0x4a310000 0x3000 0x4a320000 0x2000 0x4a326000 0x2000>;
+			reg-names = "dram0", "dram1", "shrdram2", "intc", "cfg";
+			interrupts = <0x14 0x15 0x16 0x17 0x18 0x19 0x1a 0x1b>;
+			#address-cells = <0x1>;
+			#size-cells = <0x1>;
+			ranges;
+
+			pru@4a334000 {
+				compatible = "ti,pru-rproc";
+				reg = <0x4a334000 0x2000 0x4a322000 0x400 0x4a322400 0x100>;
+				reg-names = "iram", "control", "debug";
+				mboxes = <0x3a 0x3c>;
+			};
+
+			pru@4a338000 {
+				compatible = "ti,pru-rproc";
+				reg = <0x4a338000 0x2000 0x4a324000 0x400 0x4a324400 0x100>;
+				reg-names = "iram", "control", "debug";
+				mboxes = <0x3a 0x3d>;
+			};
 		};
 
 		elm@48080000 {
